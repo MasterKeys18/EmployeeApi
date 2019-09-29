@@ -7,6 +7,11 @@ using EmployeesApi.Models;
 
 namespace EmployeesApi.App_Data
 {
+    /**
+     * Класс, содержащий реализацию методов работы с таблицей моделей сотрудников
+     *
+     * @author Gorbacheva Olga
+     */
     public static class Repository
     {
         private const string ConnectionString = @"Data Source=LAPTOP-JOE7E5FJ\SQLEXPRESS;Initial Catalog=employees;Integrated Security=True";
@@ -110,6 +115,7 @@ namespace EmployeesApi.App_Data
 
             return employee;
         }
+        
         /**
          * Возвращает id добавленного сотрудника
          */
