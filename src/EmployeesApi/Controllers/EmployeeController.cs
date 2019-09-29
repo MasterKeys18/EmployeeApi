@@ -8,43 +8,39 @@ namespace EmployeesApi.Controllers
     [RoutePrefix("api/employee")]
     public class EmployeeController : ApiController
     {
-        Repository repo = new Repository();
-        
         [HttpGet]
         [Route("all")]
-        public List<EmployeeClientModel> Get()
+        public List<EmployeeClientModel> GetAllEmployees()
         {
-            return repo.GetUsers();
+            return Repository.GetEmployees();
         }
-        
         
         [HttpGet]
         [Route("{id}")]
-        public EmployeeClientModel Details(int id)
+        public EmployeeClientModel GetById(int id)
         {
-            var user = repo.Get(id);
-            return user;
+            return Repository.Get(id);
         }
 
         [HttpPost]
         [Route("create")]
-        public int Create(EmployeeClientModel user)
+        public int Create(EmployeeClientModel employee)
         {
-            return repo.Create(user);
+            return Repository.Create(employee);
         }
  
         [HttpPut]
         [Route("update")]
-        public void Edit(EmployeeClientModel user)
+        public void Edit(EmployeeClientModel employee)
         {
-            repo.Update(user);
+            Repository.Update(employee);
         }
         
         [HttpDelete]
         [Route("{id}")]
         public void Delete(int id)
         {
-            repo.Delete(id);
+            Repository.Delete(id);
         }
     }
 }

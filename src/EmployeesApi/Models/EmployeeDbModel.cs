@@ -2,13 +2,12 @@
 {
     public class EmployeeDbModel
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string surname { get; set; }
-        public string phone { get; set; }
-        public int? companyId { get; set; }
-        public int passportId { get; set; }
-        public string type { get; set; }
-        public string number { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Phone { get; set; }
+        public int? CompanyId { get; set; }
+        public string Type { get; set; }
+        public string Number { get; set; }
     }
 }

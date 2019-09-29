@@ -2,17 +2,17 @@
 {
     public class EmployeeClientModel
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string surname { get; set; }
-        public string phone { get; set; }
-        public int? companyId { get; set; }
-        public Passport passport { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Phone { get; set; }
+        public int? CompanyId { get; set; }
+        public Passport Passport { get; set; }
     }
 
     public class Passport
     {
-        public string type { get; set; }
-        public string number { get; set; }
+        public string Type { get; set; }
+        public string Number { get; set; }
     }
 }

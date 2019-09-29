@@ -1,5 +1,4 @@
 ﻿﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -8,18 +7,17 @@ using EmployeesApi.Models;
 
 namespace EmployeesApi.App_Data
 {
-    public class Repository
+    public static class Repository
     {
-        private const string ConnectionString =
-            @"Data Source=LAPTOP-JOE7E5FJ\SQLEXPRESS;Initial Catalog=employees;Integrated Security=True";
-        
+        private const string ConnectionString = @"Data Source=LAPTOP-JOE7E5FJ\SQLEXPRESS;Initial Catalog=employees;Integrated Security=True";
 
-        public List<EmployeeClientModel> GetUsers()
+        public static List<EmployeeClientModel> GetEmployees()
         {
             List<EmployeeDbModel> employees;
             using(IDbConnection db = new SqlConnection(ConnectionString))
             {
-                employees = db.Query<EmployeeDbModel>(@"	select
+                employees = db.Query<EmployeeDbModel>
+                (@" select
                 e.id,
                 e.name,
                 e.surname,
@@ -32,27 +30,28 @@ namespace EmployeesApi.App_Data
                 e.passport = p.id").ToList();
                 
             }
-            return employees?.Select(e => new EmployeeClientModel
+            return employees.Select(e => new EmployeeClientModel
             {
-                id = e.id,
-                companyId = e.companyId,
-                name = e.name,
-                surname = e.surname,
-                phone = e.phone,
-                passport = new Passport
+                Id = e.Id,
+                CompanyId = e.CompanyId,
+                Name = e.Name,
+                Surname = e.Surname,
+                Phone = e.Phone,
+                Passport = new Passport
                 {
-                    number = e.number,
-                    type = e.type
+                    Number = e.Number,
+                    Type = e.Type
                 }
             }).ToList();
         }
  
-        public EmployeeClientModel Get(int id)
+        public static EmployeeClientModel Get(int id)
         {
             EmployeeDbModel employee;
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
-                employee = db.Query<EmployeeDbModel>(@"	select
+                employee = db.Query<EmployeeDbModel>
+                (@"select
                 e.id,
                 e.name,
                 e.surname,
@@ -69,24 +68,25 @@ namespace EmployeesApi.App_Data
                 return null;
             return new EmployeeClientModel
             {
-                id = employee.id,
-                companyId = employee.companyId,
-                name = employee.name,
-                surname = employee.surname,
-                phone = employee.phone,
-                passport = new Passport
+                Id = employee.Id,
+                CompanyId = employee.CompanyId,
+                Name = employee.Name,
+                Surname = employee.Surname,
+                Phone = employee.Phone,
+                Passport = new Passport
                 {
-                    number = employee.number,
-                    type = employee.type
+                    Number = employee.Number,
+                    Type = employee.Type
                 }
             };
         }
-        private EmployeeDbModel GetEmployee(int id)
+        private static EmployeeDbModel GetEmployee(int id)
         {
             EmployeeDbModel employee;
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
-                employee = db.Query<EmployeeDbModel>(@"	select
+                employee = db.Query<EmployeeDbModel>
+                (@"select
                 e.id,
                 e.name,
                 e.surname,
@@ -101,56 +101,54 @@ namespace EmployeesApi.App_Data
 
             return employee;
         }
-        public int Create(EmployeeClientModel employeeModel)
+        public static int Create(EmployeeClientModel employeeModel)
         {
             var employee = new EmployeeDbModel
             {
-                id = employeeModel.id,
-                name = employeeModel.name,
-                surname = employeeModel.surname,
-                phone = employeeModel.phone,
-                companyId = employeeModel.companyId,
-                number = employeeModel.passport.number,
-                type = employeeModel.passport.type
+                Id = employeeModel.Id,
+                Name = employeeModel.Name,
+                Surname = employeeModel.Surname,
+                Phone = employeeModel.Phone,
+                CompanyId = employeeModel.CompanyId,
+                Number = employeeModel.Passport.Number,
+                Type = employeeModel.Passport.Type
             };
             int employeeId;
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
-                var sqlQuery1 =
-                    "INSERT INTO Passport (type, number) VALUES (@type, @number); SELECT CAST(SCOPE_IDENTITY() as int)";
-                var passportId = db.Query<int>(sqlQuery1, new {type = employee.type, number = employee.number}).FirstOrDefault();
-                employee.passportId = passportId;
-                var sqlQuery2 = "INSERT INTO Employee (name, surname, phone, companyId, passport) VALUES(@name, @surname, @phone, @companyId, @passportId); SELECT CAST(SCOPE_IDENTITY() as int)";
-                employeeId = db.Query<int>(sqlQuery2, employee).FirstOrDefault();
+                const string sqlQueryPassport = "INSERT INTO Passport (type, number) VALUES (@type, @number); SELECT CAST(SCOPE_IDENTITY() as int)";
+                var passportId = db.Query<int>(sqlQueryPassport, new {type = employee.Type, number = employee.Number}).FirstOrDefault();
+                const string sqlQueryEmployee = "INSERT INTO Employee (name, surname, phone, companyId, passport) VALUES(@name, @surname, @phone, @companyId, @passportId); SELECT CAST(SCOPE_IDENTITY() as int)";
+                employeeId = db.Query<int>(sqlQueryEmployee, employee).FirstOrDefault();
             }
 
             return employeeId;
         }
  
-        public void Update(EmployeeClientModel employeeModel)
+        public static void Update(EmployeeClientModel employeeModel)
         {
-            var emp = GetEmployee(employeeModel.id);
-            emp.name = employeeModel.name ?? emp.name;
-            emp.surname = employeeModel.surname ?? emp.surname;
-            emp.phone = employeeModel.phone ?? emp.phone;
-            emp.companyId = employeeModel.companyId ?? emp.companyId;
-            emp.type = employeeModel.passport?.type ?? emp.type;
-            emp.number = employeeModel.passport?.number ?? emp.number;
+            var employee = GetEmployee(employeeModel.Id);
+            employee.Name = employeeModel.Name ?? employee.Name;
+            employee.Surname = employeeModel.Surname ?? employee.Surname;
+            employee.Phone = employeeModel.Phone ?? employee.Phone;
+            employee.CompanyId = employeeModel.CompanyId ?? employee.CompanyId;
+            employee.Type = employeeModel.Passport?.Type ?? employee.Type;
+            employee.Number = employeeModel.Passport?.Number ?? employee.Number;
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
-                var sqlQuery1 = "update Passport set type = @type, number = @number where id = @id";
-                db.Execute(sqlQuery1, emp);
+                const string sqlQueryPassport = "update Passport set type = @type, number = @number where id = @id";
+                db.Execute(sqlQueryPassport, employee);
                 
-                var sqlQuery = "UPDATE Employee SET name = @name, surname = @surname, phone = @phone, companyId = @companyId  WHERE id = @id";
-                db.Execute(sqlQuery, emp);
+                const string sqlQueryEmployee = "UPDATE Employee SET name = @name, surname = @surname, phone = @phone, companyId = @companyId  WHERE id = @id";
+                db.Execute(sqlQueryEmployee, employee);
             }
         }
- 
-        public void Delete(int id)
+
+        public static void Delete(int id)
         {
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
-                var sqlQuery = "DELETE FROM Employee WHERE id = @id";
+                const string sqlQuery = "DELETE FROM Employee WHERE id = @id";
                 db.Execute(sqlQuery, new { id });
             }
         }
