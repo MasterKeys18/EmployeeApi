@@ -11,6 +11,9 @@ namespace EmployeesApi.App_Data
     {
         private const string ConnectionString = @"Data Source=LAPTOP-JOE7E5FJ\SQLEXPRESS;Initial Catalog=employees;Integrated Security=True";
 
+        /**
+         * Возвращает список моделей данный о всех пользователях
+         */
         public static List<EmployeeClientModel> GetEmployees()
         {
             List<EmployeeDbModel> employees;
@@ -45,6 +48,9 @@ namespace EmployeesApi.App_Data
             }).ToList();
         }
  
+        /**
+         * Возвращает модель данных пользователя согласно указанному id
+         */
         public static EmployeeClientModel Get(int id)
         {
             EmployeeDbModel employee;
@@ -80,7 +86,10 @@ namespace EmployeesApi.App_Data
                 }
             };
         }
-        private static EmployeeDbModel GetEmployee(int id)
+        /**
+         * Возвращает промежуточную модель данных пользователя согласно указанному id
+         */
+        private static EmployeeDbModel GetEmployeeDbModel(int id)
         {
             EmployeeDbModel employee;
             using (IDbConnection db = new SqlConnection(ConnectionString))
@@ -101,6 +110,9 @@ namespace EmployeesApi.App_Data
 
             return employee;
         }
+        /**
+         * Возвращает id добавленного сотрудника
+         */
         public static int Create(EmployeeClientModel employeeModel)
         {
             var employee = new EmployeeDbModel
@@ -125,9 +137,12 @@ namespace EmployeesApi.App_Data
             return employeeId;
         }
  
+        /**
+         * Метод, позволяющий обновить данные сотрудника
+         */
         public static void Update(EmployeeClientModel employeeModel)
         {
-            var employee = GetEmployee(employeeModel.Id);
+            var employee = GetEmployeeDbModel(employeeModel.Id);
             employee.Name = employeeModel.Name ?? employee.Name;
             employee.Surname = employeeModel.Surname ?? employee.Surname;
             employee.Phone = employeeModel.Phone ?? employee.Phone;
@@ -144,6 +159,9 @@ namespace EmployeesApi.App_Data
             }
         }
 
+        /**
+         * Метод, позволяющий удалить данные сотрудника согласно указанному id
+         */
         public static void Delete(int id)
         {
             using (IDbConnection db = new SqlConnection(ConnectionString))
