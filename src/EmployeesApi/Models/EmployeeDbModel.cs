@@ -1,6 +1,11 @@
 ﻿﻿namespace EmployeesApi.Models
 {
-    public class EmployeeDbModel
+ /**
+  * Класс, отображающий модель данных сотрудника согласно представлению в базе данных
+  *
+  * @author Gorbacheva Olga
+  */
+ public class EmployeeDbModel
     {
         /**
          * Id сотрудника
