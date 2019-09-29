@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
-using EmployeesApi.App_Data;
+using EmployeesApi.DataAccess;
 using EmployeesApi.Models;
 
 namespace EmployeesApi.Controllers
@@ -20,7 +20,7 @@ namespace EmployeesApi.Controllers
          */
         public List<EmployeeClientModel> GetAllEmployees()
         {
-            return Repository.GetEmployees();
+            return EmployeeRepository.GetEmployees();
         }
         
         [HttpGet]
@@ -30,7 +30,7 @@ namespace EmployeesApi.Controllers
          */
         public EmployeeClientModel GetById(int id)
         {
-            return Repository.Get(id);
+            return EmployeeRepository.Get(id);
         }
 
         [HttpPost]
@@ -40,7 +40,7 @@ namespace EmployeesApi.Controllers
          */
         public int Create(EmployeeClientModel employee)
         {
-            return Repository.Create(employee);
+            return EmployeeRepository.Create(employee);
         }
  
         [HttpPut]
@@ -50,7 +50,7 @@ namespace EmployeesApi.Controllers
          */
         public void Update(EmployeeClientModel employee)
         {
-            Repository.Update(employee);
+            EmployeeRepository.Update(employee);
         }
         
         [HttpDelete]
@@ -60,7 +60,7 @@ namespace EmployeesApi.Controllers
          */
         public void Delete(int id)
         {
-            Repository.Delete(id);
+            EmployeeRepository.Delete(id);
         }
     }
 }

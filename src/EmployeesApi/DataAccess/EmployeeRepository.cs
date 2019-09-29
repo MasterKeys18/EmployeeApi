@@ -5,14 +5,14 @@ using System.Linq;
 using Dapper;
 using EmployeesApi.Models;
 
-namespace EmployeesApi.App_Data
+namespace EmployeesApi.DataAccess
 {
     /**
      * Класс, содержащий реализацию методов работы с таблицей моделей сотрудников
      *
      * @author Gorbacheva Olga
      */
-    public static class Repository
+    public static class EmployeeRepository
     {
         private const string ConnectionString = @"Data Source=LAPTOP-JOE7E5FJ\SQLEXPRESS;Initial Catalog=employees;Integrated Security=True";
 
